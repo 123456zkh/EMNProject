@@ -1,0 +1,824 @@
+import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
+import java.util.Scanner;
+
+
+public class chessBoard {
+	public static final Scanner sc=new Scanner(System.in,"UTF-8");
+}
+
+class thisChessBoard{
+	private static int c1=0; //用来控制输入的棋子
+	private static int c2=0; //用来控制输入的棋子
+	public static String[][] table=new String[5][5];//定义一5*5的棋盘
+	//初始化棋盘
+	public static void initTable()
+		{
+			for(int i = 0; i < table.length; ++i)
+				for(int j = 0; j < table[i].length; ++j)
+					table[i][j] = " ";
+		}
+
+	//画棋盘
+	public void drawTable() {
+			System.out.print("  ");
+			for(int i=0;i<table.length;i++)//坐标表示
+			{
+				System.out.printf(" %d   ",i);
+			}
+			System.out.printf("\n");
+			for(int i=0;i<table.length;i++){//棋盘的高度
+				System.out.println("  _ _  _ _  _ _  _ _  _ _ ");
+				System.out.print(i);
+				for(int j=0;j<table.length;j++) {//单词高度，每格里追综数据给数组
+					System.out.printf("|_%s_|",table[i][j]);
+				}
+				System.out.printf("\n");
+				System.out.printf("\n");			
+			}
+	}
+	 
+	//右下棋子布局
+	public void writeRightPieces() throws UnsupportedEncodingException {
+		PrintStream ps=new PrintStream(System.out,true,"UTF-8");
+		String str=chessBoard.sc.nextLine();
+		String[] arr=str.split("\\s+");
+		for(int i=1;i<=3;i++)//控制行数
+		{
+			int c=4;//数组的列下标
+			for(int j=1;j<=i;j++)
+			{
+				table[i+1][c]=arr[c1];
+				c--;//数组的列下标
+				c1++;//用来控制输入的棋子
+			} 
+		}
+		this.drawTable();	
+	}
+	//左上棋子开始布局
+	public void writeLeftPieces() throws UnsupportedEncodingException {
+		PrintStream ps=new PrintStream(System.out,true,"UTF-8");
+		String str=chessBoard.sc.nextLine();
+		String[] arr=str.split("\\s+");
+		int b=2;//初始化列标限制
+		for(int i=0;i<3;i++)//控制行标
+		{  
+			for(int j=0;j<=b;j++)//控制列标
+			{
+				table[i][j]=arr[c2];
+				c2++;
+			}
+			b--;//列表限制-1
+		}
+		this.drawTable();
+	}
+}
+package ewn;
+
+import ewn.seat;
+
+import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
+import java.util.Scanner;
+
+import ewn.chessBoard;
+import ewn.seat;
+/*
+ * 走棋规则
+ */
+public class move {	
+	seat s=new seat();//坐标位置类实例化
+	thisChessBoard tcb=new thisChessBoard();//棋盘布局类实例化
+	
+	//我方在右下走棋规则
+	void ourRightMove() {
+		if(s.seatrow!=0)//行坐标不为0
+		{
+			if(s.seatcol!=0)//列坐标不为0
+			{
+				tcb.table[s.seatrow-1][s.seatcol-1]=tcb.table[s.seatrow][s.seatcol];
+				tcb.table[s.seatrow][s.seatcol]=" ";
+				System.out.println("我方棋子(a=1,b=2,c=3,d=4,e=5,f=6)");
+				System.out.printf("====>我方棋子:"+tcb.table[s.seatrow-1][s.seatcol-1]+"移动到%d,%d\n",s.seatrow-1,s.seatcol-1);
+				System.out.print("\n");
+			}
+			else//列坐标为0
+			{
+				tcb.table[s.seatrow-1][s.seatcol]=tcb.table[s.seatrow][s.seatcol];
+				tcb.table[s.seatrow][s.seatcol]=" ";
+				System.out.println("我方棋子(a=1,b=2,c=3,d=4,e=5,f=6)");
+				System.out.printf("====>我方棋子:"+tcb.table[s.seatrow-1][s.seatcol]+"移动到%d,%d\n",s.seatrow-1,s.seatcol);
+				System.out.print("\n");
+			}
+		}
+		else//行坐标为0
+		{
+			tcb.table[s.seatrow][s.seatcol-1]=tcb.table[s.seatrow][s.seatcol];
+			tcb.table[s.seatrow][s.seatcol]=" ";
+			System.out.println("我方棋子(a=1,b=2,c=3,d=4,e=5,f=6)");
+			System.out.printf("====>我方棋子:"+tcb.table[s.seatrow][s.seatcol-1]+"移动到%d,%d\n",s.seatrow,s.seatcol-1);
+			System.out.print("\n");
+		}
+		tcb.drawTable();//画出棋盘
+	}
+	//我方在左上走棋规则
+	void ourLeftMove() {
+		if(s.seatrow!=4)//行坐标不为0
+		{
+			if(s.seatcol!=4)//列坐标不为0
+			{
+				tcb.table[s.seatrow+1][s.seatcol+1]=tcb.table[s.seatrow][s.seatcol];
+				tcb.table[s.seatrow][s.seatcol]=" ";
+				System.out.println("我方棋子(a=1,b=2,c=3,d=4,e=5,f=6)");
+				System.out.printf("====>我方棋子:"+tcb.table[s.seatrow+1][s.seatcol+1]+"移动到%d,%d\n",s.seatrow+1,s.seatcol+1);
+				System.out.print("\n");
+			}
+			else//列坐标为0
+			{
+				tcb.table[s.seatrow+1][s.seatcol]=tcb.table[s.seatrow][s.seatcol];
+				tcb.table[s.seatrow][s.seatcol]=" ";
+				System.out.println("我方棋子(a=1,b=2,c=3,d=4,e=5,f=6)");
+				System.out.printf("====>我方棋子:"+tcb.table[s.seatrow+1][s.seatcol]+"移动到%d,%d\n",s.seatrow+1,s.seatcol);
+				System.out.print("\n");
+			}
+		}
+		else//行坐标为0
+		{
+			tcb.table[s.seatrow][s.seatcol+1]=tcb.table[s.seatrow][s.seatcol];
+			tcb.table[s.seatrow][s.seatcol]=" ";
+			System.out.println("我方棋子(a=1,b=2,c=3,d=4,e=5,f=6)");
+			System.out.printf("====>我方棋子:"+tcb.table[s.seatrow][s.seatcol+1]+"移动到%d,%d\n",s.seatrow,s.seatcol+1);
+			System.out.print("\n");
+		}
+		tcb.drawTable();//画出棋盘
+	}
+	//敌方走棋
+	void otherMove() throws UnsupportedEncodingException {
+		PrintStream ps=new PrintStream(System.out,true,"UTF-8");
+		Scanner sc=new Scanner(System.in,"UTF-8");
+		System.out.println("请输入敌方移动后棋子的坐标(x y坐标)");
+		System.out.println("= =>(空格分隔):");
+		String str=sc.nextLine();
+		String[] s1=str.split("\\s+");
+		int row=Integer.parseInt(s1[0]);//获得敌方移动后棋子的行号
+		int col=Integer.parseInt(s1[1]);//获得敌方移动后棋子的列号
+		System.out.println("请输入敌方棋子的棋子号(1=A,2=B,3=C,4=D,5=E,6=F):");
+		System.out.println("=>(敌方移动的棋子号！(1-6)):");
+		int num=sc.nextInt();
+		s.otherSeat(num);//调用坐标方法，获得敌方移动前棋子的行号列号
+		tcb.table[row][col]=tcb.table[s.seatrow][s.seatcol];//将敌方棋子移动到目标位置
+		tcb.table[s.seatrow][s.seatcol]=" ";//将敌方棋子移动前的位置赋值为空，完成棋子移动
+		tcb.drawTable();//画出棋盘
+	}
+}
+
+package ewn;
+
+import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
+import java.util.Random;
+import java.util.Scanner;
+
+import ewn.chessBoard;
+import ewn.strategy;
+
+/**
+ * 
+ * @author kuqi
+ *
+ */
+/*
+ * 写获得骰子数，得到相应骰子坐标
+ * 
+ */
+public class seat {
+	static final Scanner sc=new Scanner(System.in,"UTF-8");
+	public static int seatrow;
+	public static int seatcol;
+	thisChessBoard tcb=new thisChessBoard();
+	strategy stra=new strategy();
+	
+	
+	/*
+	 * 我方先走,产生随机骰子，获得骰子对应的棋子坐标
+	 * 
+	 */
+	void ourSeat() throws UnsupportedEncodingException {
+		PrintStream ps=new PrintStream(System.out,true,"UTF-8");
+		String dict = null ;//骰子数用来遍历棋盘上棋子的位置		
+//		Random rand = new Random();
+//		int num= rand.nextInt(6)+1;	
+		int num;
+		System.out.print("\n");
+		System.out.print("\n");
+		System.out.println("请输入我方骰子数:");
+		num=sc.nextInt();
+		int flag2=0;//标记，用来查找棋盘上棋子标记，如果找到为1，否则为0,也是循环标记，如果找到flag2=1退出循环，flag2=0
+		do{
+			int count=0;
+			switch(num)
+			{
+				case 1:
+					dict="a";
+					//如果找打棋子
+					for(int i=0;i<5;i++) {
+						for(int j=0;j<5;j++)
+						{
+							if(tcb.table[i][j].compareTo(dict)==0)
+							{
+								seatrow=i;
+								seatcol=j;
+								flag2=1;
+								break;
+							}
+						}
+					}
+					//如果没有找到
+					if(flag2==0)
+					{
+						num++;
+					}
+					break;
+				case 2:
+					dict="b";
+					//如果找打棋子
+					for(int i=0;i<5;i++) {
+						for(int j=0;j<5;j++)
+						{
+							if(tcb.table[i][j].compareTo(dict)==0)
+							{
+								seatrow=i;
+								seatcol=j;
+								flag2=1;
+								break;
+							}
+						}
+					}
+					//如果没有找到
+					if(flag2==0)
+					{
+						num=this.select(num);
+					}
+					break;
+				case 3:
+					dict="c";
+					//如果找打棋子
+					for(int i=0;i<5;i++) {
+						for(int j=0;j<5;j++)
+						{
+							if(tcb.table[i][j].compareTo(dict)==0)
+							{
+								seatrow=i;
+								seatcol=j;
+								flag2=1;
+								break;
+							}
+						}
+					}
+					//如果没有找到
+					if(flag2==0)
+					{
+						num=this.select(num);
+						break;
+					}
+					break;
+				case 4:
+					dict="d";
+					//如果找打棋子
+					for(int i=0;i<5;i++) {
+						for(int j=0;j<5;j++)
+						{
+							if(tcb.table[i][j].compareTo(dict)==0)
+							{
+								seatrow=i;
+								seatcol=j;
+								flag2=1;
+								break;
+							}
+						}
+					}
+					//如果没有找到
+					if(flag2==0)
+					{
+						num=this.select(num);
+						break;
+					}
+					break;	
+				case 5:
+					dict="e";
+					//如果找打棋子
+					for(int i=0;i<5;i++) {
+						for(int j=0;j<5;j++)
+						{
+							if(tcb.table[i][j].compareTo(dict)==0)
+							{
+								seatrow=i;
+								seatcol=j;
+								flag2=1;
+								break;
+							}
+						}
+					}
+					//如果没有找到
+					if(flag2==0)
+					{
+						num=this.select(num);
+						break;
+					}
+					break;
+				case 6:
+					dict="f";
+					//如果找打棋子
+					for(int i=0;i<5;i++) {
+						for(int j=0;j<5;j++)
+						{
+							if(tcb.table[i][j].compareTo(dict)==0)
+							{
+								seatrow=i;
+								seatcol=j;
+								flag2=1;
+								break;
+							}
+						}
+					}
+					//如果没有找到
+					if(flag2==0)
+					{
+						num--;
+					}
+					break;
+			}
+		}while(flag2==0);
+	}
+
+	
+	//找相邻位置
+	int select(int num) 
+	{
+		int choose=0;
+		int flag=0;
+		int num1=0;
+		int num2=0;
+		String dict;
+		do {
+			if(choose==0)//找大于当前数的
+			{
+				num1=num+1;
+				switch(num1)
+				{
+					case 1:
+						dict="a";
+						for(int i=0;i<5;i++) {
+							for(int j=0;j<5;j++)
+							{
+								if(tcb.table[i][j].compareTo(dict)==0)
+								{
+									flag=1;
+									return num1;
+								}
+								else {
+									choose=1;
+								}
+							}
+						}
+						break;
+					case 2:
+						dict="b";
+						for(int i=0;i<5;i++) {
+							for(int j=0;j<5;j++)
+							{
+								if(tcb.table[i][j].compareTo(dict)==0)
+								{
+									flag=1;
+									return num1;
+								}
+								else {
+									choose=1;
+								}
+							}
+						}
+						break;
+					case 3:
+						dict="c";
+						for(int i=0;i<5;i++) {
+							for(int j=0;j<5;j++)
+							{
+								if(tcb.table[i][j].compareTo(dict)==0)
+								{
+									flag=1;
+									return num1;
+								}
+								else {
+									choose=1;
+								}
+							}
+						}
+						break;
+					case 4:
+						dict="d";
+						for(int i=0;i<5;i++) {
+							for(int j=0;j<5;j++)
+							{
+								if(tcb.table[i][j].compareTo(dict)==0)
+								{
+									flag=1;
+									return num1;
+								}
+								else {
+									choose=1;
+								}
+							}
+						}
+						break;
+					case 5:
+						dict="e";
+						for(int i=0;i<5;i++) {
+							for(int j=0;j<5;j++)
+							{
+								if(tcb.table[i][j].compareTo(dict)==0)
+								{
+									flag=1;
+									return num1;
+								}
+								else {
+									choose=1;
+								}
+							}
+						}
+						break;
+					case 6:
+						dict="f";
+						for(int i=0;i<5;i++) {
+							for(int j=0;j<5;j++)
+							{
+								if(tcb.table[i][j].compareTo(dict)==0)
+								{
+									flag=1;
+									return num1;
+								}
+								else {
+									choose=1;
+								}
+							}
+						}
+						break;
+					default:
+						choose=1;
+						break;
+				}
+			}
+			else {//找当前数小于的
+				num2=num--;
+				switch(num2)
+				{
+					case 1:
+						dict="a";
+						for(int i=0;i<5;i++) {
+							for(int j=0;j<5;j++)
+							{
+								if(tcb.table[i][j].compareTo(dict)==0)
+								{
+									flag=1;
+									return num2;
+								}
+								else {
+									choose=0;
+								}
+							}
+						}
+						break;
+					case 2:
+						dict="b";
+						for(int i=0;i<5;i++) {
+							for(int j=0;j<5;j++)
+							{
+								if(tcb.table[i][j].compareTo(dict)==0)
+								{
+									flag=1;
+									return num2;
+								}
+								else {
+									choose=0;
+								}
+							}
+						}
+						break;
+					case 3:
+						dict="c";
+						for(int i=0;i<5;i++) {
+							for(int j=0;j<5;j++)
+							{
+								if(tcb.table[i][j].compareTo(dict)==0)
+								{
+									flag=1;
+									return num2;
+								}
+								else {
+									choose=0;
+								}
+							}
+						}
+						break;
+					case 4:
+						dict="d";
+						for(int i=0;i<5;i++) {
+							for(int j=0;j<5;j++)
+							{
+								if(tcb.table[i][j].compareTo(dict)==0)
+								{
+									flag=1;
+									return num2;
+								}
+								else {
+									choose=0;
+								}
+							}
+						}
+						break;
+					case 5:
+						dict="e";
+						for(int i=0;i<5;i++) {
+							for(int j=0;j<5;j++)
+							{
+								if(tcb.table[i][j].compareTo(dict)==0)
+								{
+									flag=1;
+									return num2;
+								}
+								else {
+									choose=0;
+								}
+							}
+						}
+						break;
+					case 6:
+						dict="f";
+						for(int i=0;i<5;i++) {
+							for(int j=0;j<5;j++)
+							{
+								if(tcb.table[i][j].compareTo(dict)==0)
+								{
+									flag=1;
+									return num2;
+								}
+								else {
+									choose=0;
+								}
+							}
+						}
+						break;
+					default:
+						choose=1;
+						break;
+				}
+			}
+		}while(flag==0);
+		return 0;
+	}
+	
+	//获得敌方棋子坐标
+	int otherSeat(int num) throws UnsupportedEncodingException {
+		PrintStream ps=new PrintStream(System.out,true,"UTF-8");
+		String dict = null ;//骰子数用来遍历棋盘上棋子的位置
+		switch(num) {
+			case 1:
+				dict="A";
+				break;
+			case 2:
+				dict="B";
+				break;
+			case 3:
+				dict="C";
+				break;
+			case 4:
+				dict="D";
+				break;
+			case 5:
+				dict="E";
+				break;
+			case 6:
+				dict="F";
+				break;
+			default:
+				break;
+		}
+		for(int i=0;i<5;i++) {
+			for(int j=0;j<5;j++)
+			{
+				if(tcb.table[i][j].compareTo(dict)==0)
+				{
+					seatrow=i;
+					seatcol=j;
+					break;
+				}
+			}
+		}
+		return 0;
+	}
+}
+
+package ewn;
+
+import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
+import java.util.regex.Pattern;
+
+/**
+ * 
+ * @author kuqi
+ *
+ */
+/*
+ * 胜利规则
+ *  
+ */
+public class strategy { 
+	thisChessBoard tcb=new thisChessBoard();
+	int win(int flag) throws UnsupportedEncodingException {
+		PrintStream ps=new PrintStream(System.out,true,"UTF-8");
+		Pattern p1=Pattern.compile("^([a-f]){1}");
+		Pattern p2=Pattern.compile("^([A-F]){1}");
+		if(main.sign==1)//我方在右下角
+		{
+			for(int i=1;i<=6;i++)//我方到达对角
+			{
+				Boolean b1=p1.matcher(tcb.table[0][0]).matches();
+				if(b1) 
+					{
+						System.out.println("恭喜你, 我方取得胜利！！！");
+						return flag=1;
+					}
+			}
+			for(int i=1;i<6;i++)//敌方到达对角
+			{
+				Boolean b2=p2.matcher(tcb.table[4][4]).matches();
+				if(b2) 
+				{
+					System.out.println("很遗憾, 敌方取得胜利……");
+					return flag=1;
+				}
+			}
+				
+		}
+		else//我放在左上角
+		{
+			for(int i=1;i<6;i++)//我方到达对角
+			{
+				Boolean b1=p1.matcher(tcb.table[4][4]).matches();
+				if(b1) 
+				{
+					System.out.println("恭喜你, 我方取得胜利！！！");
+					return flag=1;
+				}
+			}
+			for(int i=1;i<=6;i++)//敌方到达对角
+			{
+				Boolean b2=p2.matcher(tcb.table[0][0]).matches();
+				if(b2) 
+					{
+						System.out.println("很遗憾, 敌方取得胜利……");
+						return flag=1;
+					}
+			}
+		}
+		int count=0;//我方棋子存在
+		int count1=0;//敌方棋子存在
+		//我方被吃完
+		for(int i=0;i<5;i++)
+		{
+			for(int j=0;j<5;j++)
+			{
+				Boolean b1=p1.matcher(tcb.table[i][j]).matches();//匹配我方棋子
+				if(b1)
+				{
+					count=1;
+					break;	
+				}
+			}
+		}
+		if(count==0) {
+			System.out.println("很遗憾, 敌方取得胜利……");
+			return flag=1;
+		}
+		for(int i=0;i<5;i++)
+		{
+			for(int j=0;j<5;j++)
+			{
+				Boolean b2=p2.matcher(tcb.table[i][j]).matches();//匹配我方棋子
+				if(b2)
+				{
+					count1=1;
+					break;	
+				}
+			}
+		}
+		if(count1==0) {
+			System.out.println("恭喜你, 我方取得胜利！！！");
+			return flag=1;
+		}
+		return 0;
+	}
+}
+
+package ewn;
+
+import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
+import java.util.Scanner;
+
+import ewn.chessBoard;
+import ewn.move;
+import ewn.seat;
+import ewn.strategy;
+
+/**
+ * 
+ * @author kuqi
+ *
+ */
+public class main {
+	public static int sign;
+	public static void main(String[] args) throws UnsupportedEncodingException {
+		PrintStream ps=new PrintStream(System.out,true,"UTF-8");
+		Scanner sc=new Scanner(System.in,"UTF-8");
+		thisChessBoard tcb=new thisChessBoard();//棋盘实例化
+		seat s=new seat(); //骰子位置实例化
+		move m=new move(); //移动实例化
+		strategy stra=new strategy();//胜利类实例化
+		 
+		//开始下棋
+		System.out.println("请输入我方在左上还是右下(0表示在左上,1表示在右下)");
+		sign=sc.nextInt();
+		if(sign==1) {
+			tcb.initTable();//棋盘初始化
+			tcb.drawTable();//画出棋盘
+			System.out.println("请输入我方棋子(a=1,b=2,c=3,d=4,e=5,f=6)");
+			System.out.println("= = = = = =>(空格分隔):");
+			tcb.writeRightPieces();//开始我方在右下布局棋子
+			System.out.println("我方棋子布局已完成啦~");
+			System.out.println("到您对手开始布局棋子！");
+			System.out.println("-----------------------------");
+			System.out.print("\n");
+			System.out.println("请输入对手布局的棋子(A=1,B=2,C=3,D=4,E=5,F=6):");
+			System.out.println("= = = = = =>(空格分隔):");
+			tcb.writeLeftPieces();//开始敌方在左上布局棋子
+			System.out.println("敌方棋子布局已经完成了。");
+			System.out.print("\n");
+			System.out.println("-----------------------------");
+			System.out.println("请输入我方先走还是敌方(0表示敌方，1表示我方):");
+			int choose=sc.nextInt();
+			int flag=0;
+			do {
+				if(choose==1)
+				{
+					s.ourSeat();//我方获得骰子随机数
+					m.ourRightMove();//我方走棋
+					flag=stra.win(flag);//判断获胜		 
+					choose=0;
+				}
+				else {
+					m.otherMove();//敌方走棋
+					flag=stra.win(flag);//判断获胜
+					choose=1;
+				}
+			}while(flag==0);
+		}
+		else
+		{
+			tcb.initTable();//棋盘初始化
+			tcb.drawTable();//画出棋盘
+			System.out.println("请输入我方棋子(a=1,b=2,c=3,d=4,e=5,f=6)");
+			System.out.println("= = = = = =>(空格分隔):");
+			tcb.writeLeftPieces();//我方在左上布局
+			System.out.println("我方棋子布局已完成啦~");
+			System.out.println("到您对手开始布局棋子！");
+			System.out.println("-----------------------------");
+			System.out.print("\n");
+			System.out.println("请输入对手布局的棋子(A=1,B=2,C=3,D=4,E=5,F=6)");
+			System.out.println("= = = = = =>(空格分隔):");
+			tcb.writeRightPieces();//敌方在右下布局
+			System.out.println("敌方棋子布局已经完成了。");
+			System.out.print("\n");
+			System.out.println("-----------------------------");
+			System.out.println("请输入我方先走还是敌方(0表示敌方,1表示我方):");
+			int choose=sc.nextInt();
+			int flag=0;
+			do {
+				if(choose==1)
+				{
+					s.ourSeat();//我方获得骰子随机数
+					m.ourLeftMove();//我方走棋
+					flag=stra.win(flag);//判断获胜		 
+					choose=0;
+				}
+				else {
+					m.otherMove();//敌方走棋
+					flag=stra.win(flag);//判断获胜
+					choose=1;
+				}
+			}while(flag==0);
+			System.out.println("输入任何字符，退出程序");
+			sc.next();
+		}
+	}
+}
